@@ -1,9 +1,12 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const bodyParser = require("body-parser");
 const app = express();
 app.use(express.json());
+
 const setupAuthRoute = require("./routes/Auth");
+const usersRouter = require("./routes/Users");
 const PORT = 3000;
 
 const logger = require("morgan");
@@ -21,6 +24,9 @@ app.use(
 app.use(cookieParser());
 
 setupAuthRoute(app);
+
+app.use(bodyParser.json());
+app.use("/api", usersRouter);
 
 app.get("/*", function (req, res) {
   res.sendFile(

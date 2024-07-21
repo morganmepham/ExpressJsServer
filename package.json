@@ -1,0 +1,38 @@
+{
+  "name": "expressjsserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.mjs",
+  "scripts": {
+    "start": "npm run electron",
+    "electron": "electron .",
+    "build": "npm run build:react && electron-builder",
+    "build:react": "cd frontend && npm run build"
+  },
+  "build": {
+    "appId": "com.myapp.desktop",
+    "productName": "MyApp",
+    "files": [
+      "frontend/build/**/*",
+      "main.mjs",
+      "backend/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico",
+      "signAndEditExecutable": false
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^31.2.1",
+    "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "electron-is-dev": "^3.0.1"
+  }
+}
