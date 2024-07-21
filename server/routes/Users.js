@@ -1,30 +1,37 @@
-const express = require("express");
-const router = express.Router();
-const connection = require("../database.js");
+const jwt = require("jsonwebtoken");
+const { cookieJwtAuth } = require("../middleware/cookieJwtAuth");
+const mysql = require("mysql2");
 
-// Route to get all users
-router.get("/users", (req, res) => {
-  connection.query("SELECT * FROM users", (err, results) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    res.json(results);
+module.exports = (app) => {
+  app.get("/users", cookieJwtAuth, async (req, res) => {
+    const db = mysql.createConnection({
+      host: "localhost",
+      user: "root",
+      password: "P@ssword1234",
+      database: "gymApp",
+    });
+
+    const sql = "SELECT * FROM users";
+    db.query(sql, (err, data) => {
+      if (err) return res.json(err);
+      return res.json(data);
+    });
   });
-});
 
-// Route to create a new user
-router.post("/users", (req, res) => {
-  const { username, password, email } = req.body;
-  connection.query(
-    "INSERT INTO users (username, password, email) VALUES (?, ?, ?)",
-    [username, password, email],
-    (err, results) => {
-      if (err) {
-        return res.status(500).send(err);
-      }
-      res.status(201).send("User created");
-    }
-  );
-});
+  app.get("/this-user", cookieJwtAuth, async (req, res) => {
+    const db = mysql.createConnection({
+      host: "localhost",
+      user: "root",
+      password: "P@ssword1234",
+      database: "gymApp",
+    });
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.MY_SECRET);
 
-module.exports = router;
+    const sql = `SELECT * FROM users WHERE username = "${decoded.username}"`;
+    db.query(sql, (err, data) => {
+      if (err) return res.json(err);
+      return res.json(data);
+    });
+  });
+};
