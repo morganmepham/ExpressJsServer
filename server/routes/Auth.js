@@ -1,24 +1,19 @@
 const jwt = require("jsonwebtoken");
 const { cookieJwtAuth } = require("../middleware/cookieJwtAuth");
-const userJSON = require("../assets/user.json");
-const mysql = require("mysql2");
-const fs = require("fs");
-const bcrypt = require("bcrypt");
+const createDbConnection = require("../database");
 
-function createDbConnection() {
-  return mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "P@ssword1234",
-    database: "gymApp",
-  });
-}
+// function createDbConnection() {
+//   return mysql.createConnection({
+//     host: "localhost",
+//     user: "root",
+//     password: "P@ssword1234",
+//     database: "gymApp",
+//   });
+// }
 
 module.exports = (app) => {
   app.post("/login", async (req, res) => {
     const { username, password } = req.body;
-    console.log(username);
-    console.log(password);
     if (!username || !password) {
       return res.status(400).json({ error: "Invalid Body" });
     }
