@@ -11,21 +11,17 @@ module.exports = (app) => {
       return res.status(400).json({ error: "Invalid Body" });
     }
 
-    const db = createDbConnection();
-    const sql = `SELECT * FROM users WHERE username = ?`;
-
-    db.query(sql, [username], async (err, results) => {
-      db.end();
-      if (err) {
-        return res.status(500).json({ error: "Database query failed" });
-      }
+    let db;
+    try {
+      db = await createDbConnection();
+      const sql = `SELECT * FROM users WHERE username = ?`;
+      const [results] = await db.query(sql, [username]);
 
       if (results.length === 0) {
         return res.status(403).json({ error: "Invalid login" });
       }
 
       const user = results[0];
-
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
         return res.status(403).json({ error: "Invalid login" });
@@ -39,7 +35,12 @@ module.exports = (app) => {
         message: "Authenticated",
         jwt: token,
       });
-    });
+    } catch (err) {
+      console.error("Database query failed:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    } finally {
+      if (db) await db.end(); // Ensure the connection is closed
+    }
   });
 
   // Logout endpoint
@@ -58,20 +59,22 @@ module.exports = (app) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     const userId = req.user.id;
 
-    const db = createDbConnection();
-    const sql = `UPDATE users SET password = ? WHERE id = ?`;
-
-    db.query(sql, [hashedPassword, userId], (err, results) => {
-      db.end();
-      if (err) {
-        return res.status(500).json({ error: "Database query failed" });
-      }
+    let db;
+    try {
+      db = await createDbConnection();
+      const sql = `UPDATE users SET password = ? WHERE id = ?`;
+      const [results] = await db.query(sql, [hashedPassword, userId]);
 
       if (results.affectedRows === 0) {
         return res.status(404).json({ error: "User not found" });
       }
 
       return res.status(200).json({ message: "Password Changed" });
-    });
+    } catch (err) {
+      console.error("Database query failed:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    } finally {
+      if (db) await db.end(); // Ensure the connection is closed
+    }
   });
 };
