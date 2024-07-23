@@ -57,6 +57,7 @@ module.exports = (app) => {
 
   // Create a new workout template for a user with exercises
   //
+  // Create a new workout template for a user with exercises
   app.post("/templates", cookieJwtAuth, async (req, res) => {
     const { name, description, exercises } = req.body;
     const token = req.cookies.token;
@@ -84,29 +85,25 @@ module.exports = (app) => {
 
       // Insert exercises
       for (const exercise of exercises) {
-        const { exercise_name, sets, reps } = exercise;
+        const { exercise_id, sets, reps } = exercise;
 
-        // Check if exercise exists, if not, create it
-        let [exerciseResult] = await connection.query(
-          "SELECT id FROM exercises WHERE name = ?",
-          [exercise_name]
+        // Check if exercise exists in the exercises table
+        const [exerciseResult] = await connection.query(
+          "SELECT id FROM exercises WHERE id = ?",
+          [exercise_id]
         );
 
-        let exerciseId;
         if (exerciseResult.length === 0) {
-          [exerciseResult] = await connection.query(
-            "INSERT INTO exercises (name) VALUES (?)",
-            [exercise_name]
-          );
-          exerciseId = exerciseResult.insertId;
-        } else {
-          exerciseId = exerciseResult[0].id;
+          await connection.rollback();
+          return res
+            .status(400)
+            .json({ error: `Exercise with id ${exercise_id} does not exist` });
         }
 
         // Insert into template_exercises
         await connection.query(
           "INSERT INTO template_exercises (template_id, exercise_id, sets, reps, order_in_template) VALUES (?, ?, ?, ?, ?)",
-          [templateId, exerciseId, sets, reps, exercises.indexOf(exercise) + 1]
+          [templateId, exercise_id, sets, reps, exercises.indexOf(exercise) + 1]
         );
       }
 
@@ -217,10 +214,17 @@ module.exports = (app) => {
       await connection.beginTransaction();
 
       // Update the template
-      await connection.query(
+      const [updateResult] = await connection.query(
         "UPDATE workout_templates SET name = ?, description = ? WHERE id = ? AND user_id = ?",
         [name, description, templateId, userId]
       );
+
+      if (updateResult.affectedRows === 0) {
+        await connection.rollback();
+        return res
+          .status(404)
+          .json({ error: "Template not found or not authorized" });
+      }
 
       // Delete existing exercises for the template
       await connection.query(
@@ -230,36 +234,32 @@ module.exports = (app) => {
 
       // Insert updated exercises
       for (const exercise of exercises) {
-        const { exercise_name, sets, reps } = exercise;
+        const { exercise_id, sets, reps } = exercise;
 
-        // Check if exercise exists, if not, create it
-        let [exerciseResult] = await connection.query(
-          "SELECT id FROM exercises WHERE name = ?",
-          [exercise_name]
+        // Check if exercise exists in the exercises table
+        const [exerciseResult] = await connection.query(
+          "SELECT id FROM exercises WHERE id = ?",
+          [exercise_id]
         );
 
-        let exerciseId;
         if (exerciseResult.length === 0) {
-          [exerciseResult] = await connection.query(
-            "INSERT INTO exercises (name) VALUES (?)",
-            [exercise_name]
-          );
-          exerciseId = exerciseResult.insertId;
-        } else {
-          exerciseId = exerciseResult[0].id;
+          await connection.rollback();
+          return res
+            .status(400)
+            .json({ error: `Exercise with id ${exercise_id} does not exist` });
         }
 
         // Insert into template_exercises
         await connection.query(
           "INSERT INTO template_exercises (template_id, exercise_id, sets, reps, order_in_template) VALUES (?, ?, ?, ?, ?)",
-          [templateId, exerciseId, sets, reps, exercises.indexOf(exercise) + 1]
+          [templateId, exercise_id, sets, reps, exercises.indexOf(exercise) + 1]
         );
       }
 
       // Commit the transaction
       await connection.commit();
 
-      res.status(200).json({ message: "Template updated" });
+      res.status(200).json({ message: "Template updated successfully" });
     } catch (error) {
       // If an error occurs, rollback the transaction
       if (connection) await connection.rollback();
