@@ -7,6 +7,7 @@ app.use(express.json());
 
 const setupAuthRoute = require("./routes/Auth");
 const setupUsersRoute = require("./routes/Users");
+const setupTemplates = require("./routes/Templates");
 const PORT = 3000;
 
 const logger = require("morgan");
@@ -25,6 +26,7 @@ app.use(cookieParser());
 
 setupAuthRoute(app);
 setupUsersRoute(app);
+setupTemplates(app);
 
 app.use(bodyParser.json());
 // app.use("/api", usersRouter);
