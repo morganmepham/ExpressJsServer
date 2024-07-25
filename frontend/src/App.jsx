@@ -7,7 +7,6 @@ import Home from "./pages/home/Home";
 // import Workouts from "./pages/Workouts";
 // import Profile from "./pages/Profile";
 import LoginPage from "./pages/login/LoginPage";
-// import Register from "./pages/Register";
 import NotFound from "./components/NotFound";
 
 function App() {
@@ -15,13 +14,10 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        {/* <Route path="/register" element={<Register />} /> */}
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
-            {/* <Route path="templates" element={<Templates />} />
-            <Route path="workouts" element={<Workouts />} />
-            <Route path="profile" element={<Profile />} /> */}
+            {/* <Route path="templates" element={<Templates />} />*/}
           </Route>
         </Route>
         {/* Catch-all route */}
