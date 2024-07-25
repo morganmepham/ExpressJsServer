@@ -2,7 +2,7 @@ import { useState } from "react";
 import TextField from "../../../components/TextField";
 import useAxiosPost from "../../../hooks/useAxiosPost";
 import { useNavigate } from "react-router-dom";
-
+import React from "react";
 const LoginForm = () => {
   const post = useAxiosPost();
   const url = "http://localhost:3000/login";
@@ -21,7 +21,7 @@ const LoginForm = () => {
       },
       (data) => {
         if (data.status === 200) {
-          navigate("/home");
+          navigate("/");
         }
       }
     );

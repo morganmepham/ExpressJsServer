@@ -1,5 +1,5 @@
 import LoginForm from "./components/LoginForm";
-
+import React from "react";
 const LoginPage = () => {
   return (
     <div className="h-full w-full bg-white flex justify-around  items-center">
