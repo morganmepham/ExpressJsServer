@@ -30,7 +30,14 @@ module.exports = (app) => {
       delete user.password;
       const token = jwt.sign(user, process.env.MY_SECRET, { expiresIn: "1h" });
 
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+        sameSite: "none", // Allow cross-site cookie
+        maxAge: 3600000, // 1 hour
+        path: "/",
+        domain: "localhost", // Ensure this matches your domain
+      });
       return res.status(200).json({
         message: "Authenticated",
         jwt: token,

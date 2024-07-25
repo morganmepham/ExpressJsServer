@@ -9,6 +9,7 @@ const setupAuthRoute = require("./routes/Auth");
 const setupUsersRoute = require("./routes/Users");
 const setupTemplates = require("./routes/Templates");
 const setupWorkouts = require("./routes/Workouts");
+const setupExercises = require("./routes/Exercises");
 const PORT = 3000;
 
 const logger = require("morgan");
@@ -16,7 +17,12 @@ app.use(logger("tiny"));
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 var cors = require("cors");
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use(
   express.urlencoded({
@@ -29,6 +35,7 @@ setupAuthRoute(app);
 setupUsersRoute(app);
 setupTemplates(app);
 setupWorkouts(app);
+setupExercises(app);
 
 app.use(bodyParser.json());
 // app.use("/api", usersRouter);

@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/home/Home";
-// import Templates from './pages/Templates'
-// import Workouts from './pages/Workouts'
-// import Profile from './pages/Profile'
-import Login from "./pages/login/LoginPage";
+// import Templates from "./pages/Templates";
+// import Workouts from "./pages/Workouts";
+// import Profile from "./pages/Profile";
+import LoginPage from "./pages/login/LoginPage";
 // import Register from "./pages/Register";
 import NotFound from "./components/NotFound";
 
@@ -14,7 +14,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
         {/* <Route path="/register" element={<Register />} /> */}
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>

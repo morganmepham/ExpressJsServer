@@ -2,15 +2,9 @@ import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {
-  const token = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("token="));
+  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return <Outlet />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;

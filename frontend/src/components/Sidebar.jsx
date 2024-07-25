@@ -27,14 +27,14 @@ const Sidebar = () => {
               Workouts
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               to="/profile"
               className="block py-2 px-4 hover:bg-gray-700 rounded"
             >
               Profile
             </Link>
-          </li>
+          </li> */}
         </ul>
       </nav>
     </div>

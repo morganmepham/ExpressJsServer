@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+axios.defaults.withCredentials = true;
 export default function useAxiosPost() {
   const [input, setInput] = useState({
     data: null,
@@ -8,6 +9,7 @@ export default function useAxiosPost() {
     callback: null,
   });
   useEffect(() => {
+    console.log(input);
     const postData = () => {
       axios
         .post(input.url, input.data)

@@ -1,55 +1,48 @@
-import { useState } from "react";
-import TextField from "../../../components/TextField";
+import React, { useState } from "react";
 import useAxiosPost from "../../../hooks/useAxiosPost";
 import { useNavigate } from "react-router-dom";
-import React from "react";
+
 const LoginForm = () => {
-  const post = useAxiosPost();
-  const url = "http://localhost:3000/login";
-
-  const navigate = useNavigate();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const post = useAxiosPost();
+  const navigate = useNavigate();
 
-  const handlePostData = () => {
-    post(
-      url,
-      {
-        username: username,
-        password: password,
-      },
-      (data) => {
-        if (data.status === 200) {
-          navigate("/");
-        }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+
+    post("http://localhost:3000/login", { username, password }, (response) => {
+      if (response.status === 200) {
+        // Successful login
+        localStorage.setItem("isAuthenticated", "true");
+        navigate("/"); // Navigate to home page
+      } else {
+        setError("Login failed. Please try again.");
       }
-    );
+    });
   };
-  return (
-    <div className="bg-teal-600 w-3/5 h-80 rounded-2xl flex justify-center items-start flex-wrap p-4 content-start pt-12">
-      <div className="flex justify-center items-center flex-wrap">
-        <TextField
-          placeholder="Username"
-          value={username}
-          setValue={setUsername}
-        />
-        <TextField
-          placeholder="Password"
-          value={password}
-          setValue={setPassword}
-        />
 
-        <button
-          className="h-12 w-24 bg-teal-800 rounded-lg text-white font-bold"
-          onClick={() => {
-            handlePostData();
-          }}
-        >
-          Login
-        </button>
-      </div>
-    </div>
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="Username"
+        required
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
+        required
+      />
+      {error && <p>{error}</p>}
+      <button type="submit">Login</button>
+    </form>
   );
 };
 

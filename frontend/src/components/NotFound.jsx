@@ -9,7 +9,7 @@ const NotFound = () => {
     if (window.history.state && window.history.state.idx > 0) {
       navigate(-1); // Go back to the previous page
     } else {
-      navigate("/", { replace: true }); // Go to the home page
+      navigate("/home", { replace: true }); // Go to the home page
     }
   }, [navigate]);
 
