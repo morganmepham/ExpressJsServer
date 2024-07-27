@@ -1,19 +1,35 @@
-import React from "react";
+// src/components/ProtectedRoute.jsx
+import React, { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import axios from "axios";
 
 const ProtectedRoute = () => {
-  const isAuthenticated = () => {
-    const cookieArr = document.cookie.split(";");
-    for (let i = 0; i < cookieArr.length; i++) {
-      const cookiePair = cookieArr[i].split("=");
-      if (cookiePair[0].trim() === "token") {
-        return true; // Cookie found
-      }
-    }
-    return false; // Cookie not found
-  };
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  return isAuthenticated() ? <Outlet /> : <Navigate to="/login" replace />;
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/check-auth", {
+          withCredentials: true,
+        });
+        setIsAuthenticated(response.data.isAuthenticated);
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;

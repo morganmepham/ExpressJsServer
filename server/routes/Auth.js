@@ -33,7 +33,7 @@ module.exports = (app) => {
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-        sameSite: "none", // Allow cross-site cookie
+        sameSite: "strict", // Allow cross-site cookie
         maxAge: 3600000, // 1 hour
         path: "/",
         domain: "localhost", // Ensure this matches your domain
@@ -82,6 +82,20 @@ module.exports = (app) => {
       return res.status(500).json({ error: "Database query failed" });
     } finally {
       if (db) await db.end(); // Ensure the connection is closed
+    }
+  });
+
+  app.get("/check-auth", (req, res) => {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.json({ isAuthenticated: false });
+    }
+
+    try {
+      jwt.verify(token, process.env.MY_SECRET);
+      res.json({ isAuthenticated: true });
+    } catch (error) {
+      res.json({ isAuthenticated: false });
     }
   });
 };

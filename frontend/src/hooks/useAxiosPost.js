@@ -9,7 +9,6 @@ export default function useAxiosPost() {
     callback: null,
   });
   useEffect(() => {
-    console.log(input);
     const postData = () => {
       axios
         .post(input.url, input.data)
@@ -23,6 +22,7 @@ export default function useAxiosPost() {
       console.log("Invalid arguments provided to post method");
     }
   }, [input]);
+
   const post = (url, data, callback) => {
     setInput({ url, data, callback });
   };

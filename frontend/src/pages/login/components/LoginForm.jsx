@@ -15,9 +15,7 @@ const LoginForm = () => {
 
     post("http://localhost:3000/login", { username, password }, (response) => {
       if (response.status === 200) {
-        // Successful login
-        localStorage.setItem("isAuthenticated", "true");
-        navigate("/"); // Navigate to home page
+        navigate("/", { replace: true }); // Navigate to home page
       } else {
         setError("Login failed. Please try again.");
       }
@@ -45,6 +43,7 @@ const LoginForm = () => {
           width: "90%",
           border: "1px solid black",
           borderRadius: "0.5rem",
+          height: "2rem",
         }}
       />
       <input
@@ -57,6 +56,7 @@ const LoginForm = () => {
           width: "90%",
           border: "1px solid black",
           borderRadius: "0.5rem",
+          height: "2rem",
         }}
       />
       {error && <p>{error}</p>}
@@ -71,6 +71,7 @@ const LoginForm = () => {
           display: "flex",
           alignContent: "center",
           justifyContent: "center",
+          alignItems: "center",
         }}
       >
         Login
