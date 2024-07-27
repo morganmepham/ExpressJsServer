@@ -2,14 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-
-body{
-    height: 100vh;
+body {
+  height: 100vh;
 }
-main{
-    height: 100%;
+main {
+  height: 100%;
 }
 
 #root {
-    height: 100vh
-  }
+  height: 100vh;
+}

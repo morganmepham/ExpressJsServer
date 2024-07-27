@@ -6,7 +6,15 @@ const LoginPage = () => {
       <div className="w-8/12 flex h-full items-center justify-center bg-teal-600 rounded-br-full">
         <h1 className="text-5xl text-white font-medium">Gym App</h1>
       </div>
-      <div className="w-3/5 flex justify-center">
+      <div
+        style={{
+          width: "50%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <LoginForm />
       </div>
     </div>

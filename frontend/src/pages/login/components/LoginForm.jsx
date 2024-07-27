@@ -25,13 +25,27 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        alignItems: "space-around",
+        height: "20%",
+      }}
+    >
       <input
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Username"
         required
+        style={{
+          width: "90%",
+          border: "1px solid black",
+          borderRadius: "0.5rem",
+        }}
       />
       <input
         type="password"
@@ -39,9 +53,28 @@ const LoginForm = () => {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         required
+        style={{
+          width: "90%",
+          border: "1px solid black",
+          borderRadius: "0.5rem",
+        }}
       />
       {error && <p>{error}</p>}
-      <button type="submit">Login</button>
+      <button
+        type="submit"
+        className="bg-teal-600"
+        style={{
+          width: "20%",
+          color: "white",
+          borderRadius: "3rem",
+          textAlign: "center",
+          display: "flex",
+          alignContent: "center",
+          justifyContent: "center",
+        }}
+      >
+        Login
+      </button>
     </form>
   );
 };
