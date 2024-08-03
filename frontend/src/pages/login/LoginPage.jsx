@@ -1,10 +1,5 @@
 import LoginForm from "./components/LoginForm";
 import React from "react";
-import HomeIcon from "@mui/icons-material/Home";
-import NoteAddIcon from "@mui/icons-material/NoteAdd";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import SettingsIcon from "@mui/icons-material/Settings";
-import LogoutIcon from "@mui/icons-material/Logout";
 import RotatingIconsBackdrop from "./components/RotatingBackdrop";
 
 const LoginPage = () => {
