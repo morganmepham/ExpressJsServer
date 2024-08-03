@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useAxiosPost from "../../../hooks/useAxiosPost";
 import { useNavigate } from "react-router-dom";
+import { Button, TextField, Typography } from "@mui/material";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -30,37 +31,44 @@ const LoginForm = () => {
         flexWrap: "wrap",
         justifyContent: "center",
         alignItems: "space-around",
-        height: "20%",
+        height: "50%",
+        position: "relative",
+        zIndex: 2,
+        backgroundColor: "white",
+        padding: "2rem",
+        width: "60%",
       }}
     >
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Username"
-        required
+      <Typography variant="h2" sx={{ fontWeight: 450, color: "#2d703f" }}>
+        Gym App
+      </Typography>
+      <div
         style={{
-          width: "90%",
-          border: "1px solid black",
-          borderRadius: "0.5rem",
-          height: "2rem",
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          alignItems: "space-around",
+          width: "100%",
         }}
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        required
-        style={{
-          width: "90%",
-          border: "1px solid black",
-          borderRadius: "0.5rem",
-          height: "2rem",
-        }}
-      />
+      >
+        <TextField
+          id="outlined-required"
+          label="Username"
+          fullWidth
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
+        />
+        <TextField
+          id="outlined-required"
+          label="Password"
+          type="password"
+          fullWidth
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+        />
+      </div>
       {error && <p>{error}</p>}
-      <button
+      {/* <button
         type="submit"
         className="bg-teal-600"
         style={{
@@ -75,7 +83,22 @@ const LoginForm = () => {
         }}
       >
         Login
-      </button>
+      </button> */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        <Button variant="text" type="submit">
+          Create Account
+        </Button>
+        <Button variant="contained" type="submit">
+          Log in
+        </Button>
+      </div>
     </form>
   );
 };
