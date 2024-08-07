@@ -70,7 +70,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Sidebar() {
   // const theme = useTheme();
-  const { post } = useAxios("http://localhost:3000");
+  const { post } = useAxios();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
 
@@ -97,6 +97,8 @@ export default function Sidebar() {
     { text: "Settings", icon: <SettingsIcon /> },
     { text: "Log Out", icon: <LogoutIcon /> },
   ];
+
+  const [selected, setSelected] = React.useState("home");
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -131,6 +133,11 @@ export default function Sidebar() {
                     minHeight: 48,
                     justifyContent: open ? "initial" : "center",
                     px: 2.5,
+                  }}
+                  selected={selected === entry.text.toLocaleLowerCase()}
+                  onClick={() => {
+                    setSelected(entry.text.toLocaleLowerCase());
+                    navigate(`/${entry.text.toLocaleLowerCase()}`);
                   }}
                 >
                   <ListItemIcon

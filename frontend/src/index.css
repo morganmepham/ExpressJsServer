@@ -4,6 +4,7 @@
 body {
   height: 100vh;
   font-family: "Roboto";
+  background-color: #ebedeb;
 }
 main {
   height: 100%;
@@ -11,4 +12,16 @@ main {
 
 #root {
   height: 100vh;
+}
+
+.flex-center-all {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+}
+
+.textField:focus {
+  border-color: yellow;
 }

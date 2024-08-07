@@ -1,0 +1,33 @@
+.card {
+  width: 15rem;
+  height: 16rem;
+  border: #2d703f solid 0.2rem;
+  border-radius: 5%;
+  margin: 1rem;
+  transition: border-color 0.3s ease;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-content: center;
+  color: #2d703f;
+}
+
+.card:hover {
+  border-color: #4caf50; /* A lighter green color */
+  color: #4caf50;
+  cursor: pointer;
+}
+
+.custom-scrollbar {
+  overflow: hidden; /* Hide the scrollbar */
+  overflow-y: scroll; /* Allow vertical scrolling */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Webkit browsers */
+}
+
+.custom-scrollbar {
+  -ms-overflow-style: none; /* Hide scrollbar for Internet Explorer and Edge */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}

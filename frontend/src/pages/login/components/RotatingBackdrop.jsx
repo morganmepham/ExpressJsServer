@@ -14,6 +14,7 @@ import {
   Email,
   Person,
 } from "@mui/icons-material";
+import { useTheme } from "@emotion/react";
 
 const IconContainer = styled("div")(() => ({
   position: "absolute",
@@ -49,13 +50,14 @@ const RotatingIconsBackdrop = (open) => {
     Email,
     Person,
   ];
+  const theme = useTheme();
 
   return (
     <Backdrop
       sx={{
         color: "#fff",
         zIndex: 1,
-        backgroundColor: "#ebedeb",
+        backgroundColor: theme.palette.background.backdrop,
         height: "100%",
       }}
       open={open}

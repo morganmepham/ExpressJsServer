@@ -3,13 +3,14 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
 
-const useAxios = (baseURL) => {
+const useAxios = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
 
   const axiosInstance = axios.create({
-    baseURL,
+    baseURL: "http://localhost:3000",
+    withCredentials: true,
   });
 
   const fetchData = useCallback(
@@ -24,7 +25,7 @@ const useAxios = (baseURL) => {
           headers,
         });
         setData(response.data);
-        return response.data;
+        return response;
       } catch (err) {
         setError(err);
         throw err;
