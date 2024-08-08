@@ -19,7 +19,7 @@ module.exports = (app) => {
       db = await createDbConnection();
       const sql = `
         SELECT wt.id AS template_id, wt.name AS template_name, 
-               e.name AS exercise_name, te.sets, te.reps, te.order_in_template
+               e.id AS exercise_id, te.sets, te.reps, te.order_in_template
         FROM workout_templates wt
         LEFT JOIN template_exercises te ON wt.id = te.template_id
         LEFT JOIN exercises e ON te.exercise_id = e.id
@@ -33,17 +33,18 @@ module.exports = (app) => {
         return res.status(404).json({ error: "Template not found" });
       }
 
+      // Construct the response object with both template_name and template_id
       const template = {
-        templateName: results[0].template_name,
         templateId: results[0].template_id,
+        templateName: results[0].template_name,
         exercises: results
           .map((row) => ({
-            exercise_name: row.exercise_name,
+            exercise_id: row.exercise_id,
             sets: row.sets,
             reps: row.reps,
             order_in_template: row.order_in_template,
           }))
-          .filter((exercise) => exercise.exercise_name !== null),
+          .filter((exercise) => exercise.exercise_id !== null),
       };
 
       return res.json(template);
@@ -54,9 +55,6 @@ module.exports = (app) => {
       if (db) await db.end(); // Ensure the connection is closed
     }
   });
-
-  // Create a new workout template for a user with exercises
-  //
   // Create a new workout template for a user with exercises
   app.post("/templates", cookieJwtAuth, async (req, res) => {
     const { name, description, exercises } = req.body;

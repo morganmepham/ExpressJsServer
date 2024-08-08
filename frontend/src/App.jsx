@@ -1,21 +1,20 @@
-import React, { useMemo, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Home from "./pages/home/Home";
-import Templates from "./pages/templates/Templates";
+import React, { useMemo, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
+import Home from './pages/home/Home';
+import Templates from './pages/templates/Templates';
 // import Workouts from "./pages/Workouts";
 // import Profile from "./pages/Profile";
-import LoginPage from "./pages/login/LoginPage";
-import NotFound from "./components/NotFound";
+import LoginPage from './pages/login/LoginPage';
+import NotFound from './components/NotFound';
 
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
 
 function App() {
-  const [mode] = useState("dark");
+  const [mode] = useState('light');
 
-  // const theme = createTheme({
   //   palette: {
   //     mode,
   //     ...(mode === "light"
@@ -48,36 +47,36 @@ function App() {
       createTheme({
         palette: {
           mode,
-          ...(mode === "light"
+          ...(mode === 'light'
             ? {
                 primary: {
-                  main: "#2d703f",
-                  light: "#4CAF50",
-                  dark: "#1B5E20",
-                  contrastText: "#ffffff",
+                  main: '#2d703f',
+                  light: '#4CAF50',
+                  dark: '#1B5E20',
+                  contrastText: '#ffffff',
                 },
                 secondary: {
-                  main: "#4CAF50",
-                  background: "#fff",
+                  main: '#4CAF50',
+                  background: '#fff',
                 },
                 background: {
-                  backdrop: "#bdc2bc",
-                  paper: "#f0f2f0",
+                  backdrop: '#bdc2bc',
+                  paper: '#f0f2f0',
                 },
               }
             : {
                 primary: {
-                  main: "#2d703f",
-                  light: "#4CAF50",
-                  dark: "#1B5E20",
-                  contrastText: "#ffffff",
+                  main: '#2d703f',
+                  light: '#4CAF50',
+                  dark: '#1B5E20',
+                  contrastText: '#ffffff',
                 },
                 secondary: {
-                  main: "#4CAF50",
-                  background: "#1b1c1b",
+                  main: '#4CAF50',
+                  background: '#1b1c1b',
                 },
                 background: {
-                  backdrop: "#20261f",
+                  backdrop: '#20261f',
                 },
               }),
         },

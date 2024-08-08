@@ -6,11 +6,12 @@ import AddIcon from '@mui/icons-material/Add';
 import { useTheme } from '@emotion/react';
 import TemplateModal from './components/TemplateModal';
 const Templates = () => {
-  const { get, post } = useAxios();
+  const { get, post, put } = useAxios();
   const theme = useTheme();
 
   const [templates, setTemplates] = useState([]);
   const [templateModalOpen, setTemplateModalOpen] = useState(false);
+  const [templateId, setTemplateId] = useState(undefined);
 
   const getAllTemplates = async () => {
     try {
@@ -28,9 +29,19 @@ const Templates = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getAllTemplates();
   }, [templateModalOpen]);
+
+  const updateTemplate = async (body) => {
+    try {
+      const result = await put('/template', body);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       style={{
@@ -59,12 +70,34 @@ const Templates = () => {
           <p style={{ width: '100%', textAlign: 'center' }}>Create Template</p>
         </div>
         {templates?.map((template) => {
-          return <TemplateCard key={Math.floor(Math.random())} templateName={template?.name} />;
+          return (
+            <TemplateCard
+              key={Math.floor(Math.random())}
+              templateName={template?.name}
+              templateId={template?.id}
+              onClick={(templateId) => {
+                setTemplateId(templateId);
+                setTemplateModalOpen(true);
+              }}
+            />
+          );
         })}
       </div>
 
-      {templateModalOpen && (
+      {templateModalOpen && templateId === undefined && (
         <TemplateModal handleSave={(body) => createTemplate(body)} handleClose={() => setTemplateModalOpen(false)} />
+      )}
+      {templateModalOpen && templateId !== undefined && (
+        <TemplateModal
+          handleUpdate={(body) => {
+            updateTemplate(body);
+          }}
+          handleClose={() => {
+            setTemplateModalOpen(false);
+            setTemplateId(undefined);
+          }}
+          templateId={templateId}
+        />
       )}
     </div>
   );

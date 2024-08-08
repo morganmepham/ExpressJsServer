@@ -4,7 +4,7 @@ import { useTheme } from '@emotion/react';
 import ExerciseRow from './ExerciseRow';
 import useAxios from '../../../hooks/useAxios';
 
-const TemplateModal = ({ handleClose, handleSave, templateId }) => {
+const TemplateModal = ({ handleClose, handleSave, templateId, handleUpdate }) => {
   const theme = useTheme();
   const { get, post } = useAxios();
 
@@ -47,6 +47,18 @@ const TemplateModal = ({ handleClose, handleSave, templateId }) => {
     handleClose();
   };
 
+  const handleUpdateTemplate = () => {
+    console.log('Upda template:', { name: templateName, exercises });
+    const template = {
+      templateId,
+      name: templateName,
+      description: ' ',
+      exercises,
+    };
+    handleUpdate(template);
+    handleClose();
+  };
+
   const getExercises = async () => {
     try {
       const result = await get('/exercises');
@@ -60,6 +72,7 @@ const TemplateModal = ({ handleClose, handleSave, templateId }) => {
     try {
       const result = await post('/template', { templateId });
       setTemplateName(result.data.templateName);
+      setExercises(result.data.exercises);
     } catch (error) {
       console.log(error);
     }
@@ -68,6 +81,7 @@ const TemplateModal = ({ handleClose, handleSave, templateId }) => {
   useEffect(() => {
     getExercises();
     if (templateId) {
+      getTemplate(templateId);
     }
   }, []);
 
@@ -163,7 +177,7 @@ const TemplateModal = ({ handleClose, handleSave, templateId }) => {
             </div>
             <DialogActions sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
               <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleSaveTemplate} variant="contained">
+              <Button onClick={templateId ? handleUpdateTemplate : handleSaveTemplate} variant="contained">
                 Save Template
               </Button>
             </DialogActions>
