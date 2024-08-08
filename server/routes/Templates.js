@@ -131,7 +131,11 @@ module.exports = (app) => {
     let db;
     try {
       db = await createDbConnection();
-      const sql = `SELECT * FROM workout_templates WHERE user_id = ?`;
+      const sql = `
+        SELECT * FROM workout_templates 
+        WHERE user_id = ? 
+        ORDER BY created_at DESC
+      `;
       const [results] = await db.query(sql, [userId]);
       return res.json(results);
     } catch (err) {

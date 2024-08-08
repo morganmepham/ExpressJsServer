@@ -79,7 +79,7 @@ module.exports = (app) => {
     let db;
     try {
       db = await createDbConnection();
-      const sql = `SELECT * FROM workouts WHERE user_id = ?`;
+      const sql = `SELECT * FROM workouts WHERE user_id = ? ORDER BY date DESC`;
       const [results] = await db.query(sql, [userId]);
       return res.json(results);
     } catch (err) {

@@ -4,7 +4,7 @@ import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/home/Home';
 import Templates from './pages/templates/Templates';
-// import Workouts from "./pages/Workouts";
+import Workouts from './pages/workouts/Workouts';
 // import Profile from "./pages/Profile";
 import LoginPage from './pages/login/LoginPage';
 import NotFound from './components/NotFound';
@@ -93,6 +93,7 @@ function App() {
             <Route element={<Layout />}>
               <Route path="/home" element={<Home />} />
               <Route path="templates" element={<Templates />} />
+              <Route path="workouts" element={<Workouts />} />
             </Route>
           </Route>
           {/* Catch-all route */}
