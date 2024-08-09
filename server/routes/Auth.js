@@ -5,7 +5,7 @@ const createDbConnection = require("../database");
 
 module.exports = (app) => {
   // Login endpoint
-  app.post("/login", async (req, res) => {
+  app.post("/api/login", async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
       return res.status(400).json({ error: "Invalid Body" });
@@ -51,13 +51,13 @@ module.exports = (app) => {
   });
 
   // Logout endpoint
-  app.post("/logout", cookieJwtAuth, async (req, res) => {
+  app.post("/api/logout", cookieJwtAuth, async (req, res) => {
     res.clearCookie("token");
     return res.status(200).json({ message: "Logged out" });
   });
 
   // Change Password endpoint
-  app.post("/change-password", cookieJwtAuth, async (req, res) => {
+  app.post("/api/change-password", cookieJwtAuth, async (req, res) => {
     const { newPassword } = req.body;
     if (!newPassword) {
       return res.status(400).json({ error: "Invalid Body" });
@@ -85,7 +85,7 @@ module.exports = (app) => {
     }
   });
 
-  app.get("/check-auth", (req, res) => {
+  app.get("/api/check-auth", (req, res) => {
     const token = req.cookies.token;
     if (!token) {
       return res.json({ isAuthenticated: false });

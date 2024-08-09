@@ -13,7 +13,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 
 function App() {
-  const [mode] = useState('light');
+  const [mode] = useState('dark');
 
   //   palette: {
   //     mode,

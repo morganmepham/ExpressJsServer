@@ -5,7 +5,7 @@ const createDbConnection = require("../database");
 
 module.exports = (app) => {
   // POST Request - Create User
-  app.post("/users", async (req, res) => {
+  app.post("/api/users", async (req, res) => {
     const { username, email, password } = req.body;
 
     // Validate input data
@@ -48,7 +48,7 @@ module.exports = (app) => {
   });
 
   // GET Request - Get All Users
-  app.get("/users", cookieJwtAuth, async (req, res) => {
+  app.get("/api/users", cookieJwtAuth, async (req, res) => {
     let db;
     try {
       db = await createDbConnection();
@@ -64,7 +64,7 @@ module.exports = (app) => {
   });
 
   // GET Request - Get Current User
-  app.get("/this-user", cookieJwtAuth, async (req, res) => {
+  app.get("/api/this-user", cookieJwtAuth, async (req, res) => {
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.MY_SECRET);
     let db;
@@ -84,7 +84,7 @@ module.exports = (app) => {
   });
 
   // DELETE Request - Delete User
-  app.delete("/users", cookieJwtAuth, async (req, res) => {
+  app.delete("/api/users", cookieJwtAuth, async (req, res) => {
     const { id: userId } = req.body;
 
     if (!userId) {
@@ -114,7 +114,7 @@ module.exports = (app) => {
   });
 
   // PUT Request - Update User with JWT Update
-  app.put("/users", cookieJwtAuth, async (req, res) => {
+  app.put("/api/users", cookieJwtAuth, async (req, res) => {
     const { id: userId, username, email, password } = req.body;
 
     // Validate input data

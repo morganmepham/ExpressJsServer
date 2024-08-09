@@ -2,34 +2,31 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const bodyParser = require("body-parser");
-const app = express();
-app.use(express.json());
+const logger = require("morgan");
+const cors = require("cors");
+const https = require("https");
+const fs = require("fs");
 
+const app = express();
+const PORT = 3000;
+
+// Middleware
+app.use(logger("dev"));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+// API Routes
 const setupAuthRoute = require("./routes/Auth");
 const setupUsersRoute = require("./routes/Users");
 const setupTemplates = require("./routes/Templates");
 const setupWorkouts = require("./routes/Workouts");
 const setupExercises = require("./routes/Exercises");
-const PORT = 3000;
-
-const logger = require("morgan");
-app.use(logger("tiny"));
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-var cors = require("cors");
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
-
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
-app.use(cookieParser());
 
 setupAuthRoute(app);
 setupUsersRoute(app);
@@ -37,20 +34,16 @@ setupTemplates(app);
 setupWorkouts(app);
 setupExercises(app);
 
-app.use(bodyParser.json());
-// app.use("/api", usersRouter);
-
-app.get("/*", function (req, res) {
-  res.sendFile(
-    path.join(__dirname, "../frontend/dist/index.html"),
-    function (err) {
-      if (err) {
-        res.status(500).send(err);
-      }
+// Catch-all handler for client-side routing
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"), (err) => {
+    if (err) {
+      res.status(500).send(err);
     }
-  );
+  });
 });
 
+// Start the server
 app.listen(PORT, () => {
-  console.log(`Example app listening at http://localhost:${PORT}`);
+  console.log(`Server is running at http://localhost:${PORT}`);
 });

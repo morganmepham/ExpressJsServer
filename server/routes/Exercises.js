@@ -5,7 +5,7 @@ const createDbConnection = require("../database");
 
 module.exports = (app) => {
   // Get all exercises
-  app.get("/exercises", cookieJwtAuth, async (req, res) => {
+  app.get("/api/exercises", cookieJwtAuth, async (req, res) => {
     let db;
     try {
       db = await createDbConnection();

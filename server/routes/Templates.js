@@ -4,7 +4,7 @@ const createDbConnection = require("../database");
 
 module.exports = (app) => {
   // Get Specific Template
-  app.post("/template", cookieJwtAuth, async (req, res) => {
+  app.post("/api/template", cookieJwtAuth, async (req, res) => {
     const { templateId } = req.body;
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.MY_SECRET);
@@ -56,7 +56,7 @@ module.exports = (app) => {
     }
   });
   // Create a new workout template for a user with exercises
-  app.post("/templates", cookieJwtAuth, async (req, res) => {
+  app.post("/api/templates", cookieJwtAuth, async (req, res) => {
     const { name, description, exercises } = req.body;
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.MY_SECRET);
@@ -123,7 +123,7 @@ module.exports = (app) => {
   });
 
   // Get all templates for a user
-  app.get("/templates", cookieJwtAuth, async (req, res) => {
+  app.get("/api/templates", cookieJwtAuth, async (req, res) => {
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.MY_SECRET);
     const userId = decoded.id;
@@ -147,7 +147,7 @@ module.exports = (app) => {
   });
 
   // Delete a template
-  app.delete("/template", cookieJwtAuth, async (req, res) => {
+  app.delete("/api/template", cookieJwtAuth, async (req, res) => {
     const { templateId } = req.body;
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.MY_SECRET);
@@ -197,7 +197,7 @@ module.exports = (app) => {
   });
 
   // Update a template
-  app.put("/template", cookieJwtAuth, async (req, res) => {
+  app.put("/api/template", cookieJwtAuth, async (req, res) => {
     const { templateId, name, description, exercises } = req.body;
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.MY_SECRET);

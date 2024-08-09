@@ -4,7 +4,7 @@ const createDbConnection = require("../database");
 
 module.exports = (app) => {
   // Create a new workout
-  app.post("/workouts", cookieJwtAuth, async (req, res) => {
+  app.post("/api/workouts", cookieJwtAuth, async (req, res) => {
     const { name, exercises } = req.body;
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.MY_SECRET);
@@ -71,7 +71,7 @@ module.exports = (app) => {
   });
 
   // Get all workouts for a user
-  app.get("/workouts", cookieJwtAuth, async (req, res) => {
+  app.get("/api/workouts", cookieJwtAuth, async (req, res) => {
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.MY_SECRET);
     const userId = decoded.id;
@@ -91,7 +91,7 @@ module.exports = (app) => {
   });
 
   // Get details of a specific workout
-  app.post("/workout", cookieJwtAuth, async (req, res) => {
+  app.post("/api/workout", cookieJwtAuth, async (req, res) => {
     const { workoutId } = req.body;
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.MY_SECRET);
@@ -141,7 +141,7 @@ module.exports = (app) => {
   });
 
   // Delete a workout
-  app.delete("/workout", cookieJwtAuth, async (req, res) => {
+  app.delete("/api/workout", cookieJwtAuth, async (req, res) => {
     const { workoutId } = req.body;
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.MY_SECRET);
@@ -191,7 +191,7 @@ module.exports = (app) => {
   });
 
   // Update a workout
-  app.put("/workout", cookieJwtAuth, async (req, res) => {
+  app.put("/api/workout", cookieJwtAuth, async (req, res) => {
     const { workoutId, name, exercises } = req.body;
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.MY_SECRET);
