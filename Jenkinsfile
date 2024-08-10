@@ -30,14 +30,14 @@ pipeline {
             }
         }
 
-          stage('Build and Deploy') {
+         stage('Build and Deploy') {
             steps {
                 script {
                     def frontendDeployPath = '/home/default_admin/deploy/frontend'
                     def serverDeployPath = '/home/default_admin/deploy/server'
                     def vmIp = '192.168.0.40'
                     def user = 'default_admin'
-                    def sshKey = '~/.ssh/jenkins_ssh'
+                    def sshKey = '/var/lib/jenkins/.ssh/jenkins_ssh'
 
                     sh """
                     scp -i ${sshKey} -o StrictHostKeyChecking=no -r frontend/dist ${user}@${vmIp}:${frontendDeployPath}
