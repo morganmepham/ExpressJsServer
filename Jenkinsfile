@@ -36,10 +36,10 @@ pipeline {
                 FRONTEND_DEPLOY_PATH=/home/default_admin/deploy/frontend
                 SERVER_DEPLOY_PATH=/home/default_admin/deploy/server
 
-                scp -r frontend/dist user@vm_ip:${FRONTEND_DEPLOY_PATH}
-                scp -r server user@vm_ip:${SERVER_DEPLOY_PATH}
+                scp -r frontend/dist default_admin@192.168.0.40:${FRONTEND_DEPLOY_PATH}
+                scp -r server default_admin@192.168.0.40:${SERVER_DEPLOY_PATH}
 
-                ssh user@vm_ip '
+                ssh default_admin@192.168.0.40 '
                     cd ${SERVER_DEPLOY_PATH} &&
                     npm install &&
                     npm start
