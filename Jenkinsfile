@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git url: 'git@github.com:morganmepham/ExpressJsServer.git', credentialsId: 'your-credential-id'
+                git url: 'git@github.com:morganmepham/ExpressJsServer.git', credentialsId: '1'
             }
         }
         stage('Build') {
