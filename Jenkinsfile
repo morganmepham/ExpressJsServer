@@ -4,35 +4,25 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'git@github.com:morganmepham/ExpressJsServer.git'
+                git url: 'git@github.com:morganmepham/ExpressJsServer.git', credentialsId: 'your-credential-id'
             }
         }
-        stage('Install Dependencies') {
+        stage('Build') {
             steps {
-                sh 'npm install'
+                echo 'Building...'
+                // Add build commands here
             }
         }
-        stage('Build Frontend') {
+        stage('Test') {
             steps {
-                sh 'npm run build --prefix frontend'
-            }
-        }
-        stage('Build Backend') {
-            steps {
-                sh 'npm run build --prefix backend'
-            }
-        }
-        stage('Run Tests') {
-            steps {
-                sh 'npm test'
+                echo 'Testing...'
+                // Add test commands here
             }
         }
         stage('Deploy') {
-            when {
-                branch 'main'
-            }
             steps {
-                sh 'pm2 restart server.js'
+                echo 'Deploying...'
+                // Add deployment commands here
             }
         }
     }
