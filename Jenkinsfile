@@ -4,8 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'git@github.com:morganmepham/ExpressJsServer.git',
-                credentialsId "1"
+                git 'git@github.com:morganmepham/ExpressJsServer.git'
             }
         }
         stage('Install Dependencies') {
