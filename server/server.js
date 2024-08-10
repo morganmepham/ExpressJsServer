@@ -45,8 +45,8 @@ app.get("/*", (req, res) => {
 
 // HTTPS server options
 const httpsOptions = {
-  key: fs.readFileSync("C:/Users/morga/Documents/cert/localhost-key.pem"),
-  cert: fs.readFileSync("C:/Users/morga/Documents/cert/localhost-cert.pem"),
+  key: fs.readFileSync("/home/default_admin/certs/private.key"),
+  cert: fs.readFileSync("/home/default_admin/certs/certificate.crt"),
 };
 
 // Create HTTPS server
