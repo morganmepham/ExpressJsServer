@@ -5,10 +5,10 @@ const bodyParser = require("body-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const https = require("https");
+const http = require("http");
 const fs = require("fs");
 
 const app = express();
-const PORT = 3000;
 
 // Middleware
 app.use(logger("dev"));
@@ -43,7 +43,23 @@ app.get("/*", (req, res) => {
   });
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+// HTTPS server options
+const httpsOptions = {
+  key: fs.readFileSync("C:/Users/morga/Documents/cert/localhost-key.pem"),
+  cert: fs.readFileSync("C:/Users/morga/Documents/cert/localhost-cert.pem"),
+};
+
+// Create HTTPS server
+https.createServer(httpsOptions, app).listen(443, () => {
+  console.log("HTTPS Server running on port 443");
 });
+
+// Create HTTP server for redirection
+http
+  .createServer((req, res) => {
+    res.writeHead(301, { Location: `https://${req.headers.host}${req.url}` });
+    res.end();
+  })
+  .listen(80, () => {
+    console.log("HTTP Server running on port 80 and redirecting to HTTPS");
+  });
