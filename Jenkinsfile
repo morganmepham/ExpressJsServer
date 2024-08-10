@@ -30,26 +30,27 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-    steps {
-        script {
-            def frontendDeployPath = '/home/default_admin/deploy/frontend'
-            def serverDeployPath = '/home/default_admin/deploy/server'
-            def vmIp = '192.168.0.40'
-            def user = 'default_admin'
+          stage('Build and Deploy') {
+            steps {
+                script {
+                    def frontendDeployPath = '/home/default_admin/deploy/frontend'
+                    def serverDeployPath = '/home/default_admin/deploy/server'
+                    def vmIp = '192.168.0.40'
+                    def user = 'default_admin'
+                    def sshKey = '~/.ssh/jenkins_ssh'
 
-            sh """
-            scp -o StrictHostKeyChecking=no -r frontend/dist ${user}@${vmIp}:${frontendDeployPath}
-            scp -o StrictHostKeyChecking=no -r server ${user}@${vmIp}:${serverDeployPath}
-            ssh -o StrictHostKeyChecking=no ${user}@${vmIp} '
-                cd ${serverDeployPath} &&
-                npm install &&
-                npm start
-            '
-            """
+                    sh """
+                    scp -i ${sshKey} -o StrictHostKeyChecking=no -r frontend/dist ${user}@${vmIp}:${frontendDeployPath}
+                    scp -i ${sshKey} -o StrictHostKeyChecking=no -r server ${user}@${vmIp}:${serverDeployPath}
+                    ssh -i ${sshKey} -o StrictHostKeyChecking=no ${user}@${vmIp} '
+                        cd ${serverDeployPath} &&
+                        npm install &&
+                        npm start
+                    '
+                    """
+                }
+            }
         }
-    }
-}
 
     }
 
