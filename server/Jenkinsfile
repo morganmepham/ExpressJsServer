@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/your-repo/gymapp.git'
+                git 'git@github.com:morganmepham/ExpressJsServer.git'
             }
         }
         stage('Install Dependencies') {
