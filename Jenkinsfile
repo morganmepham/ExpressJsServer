@@ -31,22 +31,26 @@ pipeline {
         }
 
         stage('Deploy') {
-            steps {
-                sh '''
-                FRONTEND_DEPLOY_PATH=/home/default_admin/deploy/frontend
-                SERVER_DEPLOY_PATH=/home/default_admin/deploy/server
+    steps {
+        script {
+            def frontendDeployPath = '/home/default_admin/deploy/frontend'
+            def serverDeployPath = '/home/default_admin/deploy/server'
+            def vmIp = '192.168.0.40'
+            def user = 'default_admin'
 
-                scp -r frontend/dist default_admin@192.168.0.40:${FRONTEND_DEPLOY_PATH}
-                scp -r server default_admin@192.168.0.40:${SERVER_DEPLOY_PATH}
-
-                ssh default_admin@192.168.0.40 '
-                    cd ${SERVER_DEPLOY_PATH} &&
-                    npm install &&
-                    npm start
-                '
-                '''
-            }
+            sh """
+            scp -o StrictHostKeyChecking=no -r frontend/dist ${user}@${vmIp}:${frontendDeployPath}
+            scp -o StrictHostKeyChecking=no -r server ${user}@${vmIp}:${serverDeployPath}
+            ssh -o StrictHostKeyChecking=no ${user}@${vmIp} '
+                cd ${serverDeployPath} &&
+                npm install &&
+                npm start
+            '
+            """
         }
+    }
+}
+
     }
 
     post {
