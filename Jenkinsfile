@@ -76,27 +76,25 @@ pipeline {
         //     }
         // }
 
-         stage('Build and Deploy') {
-            steps {
-                script {
-                    def frontendDeployPath = '/home/default_admin/deploy/frontend'
-                    def serverDeployPath = '/home/default_admin/deploy/server'
-                    def vmIp = '192.168.0.40'
-                    def user = 'default_admin'
-                    def sshKey = '/var/lib/jenkins/.ssh/jenkins_ssh'
+stage('Deploy to VM') {
+    steps {
+        sshagent(credentials: ['jenkins-ssh']) {
+            // Deploy Frontend
+            sh 'ssh -o StrictHostKeyChecking=no default_admin@192.168.0.40 "mkdir -p /home/default_admin/deploy/frontend_incoming"'
+            sh 'scp -r frontend/dist/* default_admin@192.168.0.40:/home/default_admin/deploy/frontend_incoming/'
+            sh 'ssh default_admin@192.168.0.40 "sudo /home/default_admin/deploy_frontend.sh"'
 
-                    sh """
-                    scp -i ${sshKey} -o StrictHostKeyChecking=no -r frontend/dist ${user}@${vmIp}:${frontendDeployPath}
-                    scp -i ${sshKey} -o StrictHostKeyChecking=no -r server ${user}@${vmIp}:${serverDeployPath}
-                    ssh -i ${sshKey} -o StrictHostKeyChecking=no ${user}@${vmIp} '
-                        cd ${serverDeployPath} &&
-                        npm install &&
-                        npm start
-                    '
-                    """
-                }
-            }
+            // Deploy Server
+            sh 'ssh default_admin@192.168.0.40 "mkdir -p /home/default_admin/deploy/server_incoming"'
+            sh 'scp -r server/* default_admin@192.168.0.40:/home/default_admin/deploy/server_incoming/'
+            sh 'ssh default_admin@192.168.0.40 "sudo /home/default_admin/deploy_server.sh"'
+
+            // Restart Server
+            sh 'ssh default_admin@192.168.0.40 "pm2 restart server || pm2 start /home/default_admin/deploy/server/server.js --name server"'
         }
+    }
+}
+
 
     }
 
