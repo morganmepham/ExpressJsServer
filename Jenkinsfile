@@ -18,56 +18,56 @@ pipeline {
             }
         }
 
-        stage('Build Frontend') {
-            steps {
-                dir('frontend') {
-                    sh 'npm install'
-                    sh 'npm run build'
-                }
-            }
-        }
+        // stage('Build Frontend') {
+        //     steps {
+        //         dir('frontend') {
+        //             sh 'npm install'
+        //             sh 'npm run build'
+        //         }
+        //     }
+        // }
 
-        stage('Build Backend') {
+        // stage('Build Backend') {
+        //     steps {
+        //         dir('server') {
+        //             sh 'npm install'
+        //             // Add additional build steps if necessary
+        //         }
+        //     }
+        // }
+
+        stage('Adjust Permissions') {
             steps {
-                dir('server') {
-                    sh 'npm install'
-                    // Add additional build steps if necessary
-                }
+                sh 'sudo chmod 644 /home/default_admin/deploy/server/server.js'
             }
         }
 
         stage('Check File Permissions - server.js') {
-    steps {
-        sh 'ls -l /home/default_admin/deploy/server/server.js'
-        sh 'whoami'
-    }
-}
+            steps {
+                sh 'ls -l /home/default_admin/deploy/server/server.js'
+                sh 'whoami'
+            }
+        }
 
-        stage('Verify Server.js') {
-    steps {
-        sh 'cat /home/default_admin/deploy/server/server.js'
-    }
-}
+        stage('Check Node Version') {
+            steps {
+                sh 'node --version'
+            }
+        }
 
-stage('Check Node Version') {
-    steps {
-        sh 'node --version'
-    }
-}
+        stage('Check Permissions - cert') {
+            steps {
+                sh 'ls -l /home/default_admin/certs/private.key'
+                sh 'ls -l /home/default_admin/certs/certificate.crt'
+            }
+        }
 
-stage('Check Permissions - cert') {
-    steps {
-        sh 'ls -l /home/default_admin/certs/private.key'
-        sh 'ls -l /home/default_admin/certs/certificate.crt'
-    }
-}
-
-stage('Restart Node') {
-    steps {
-        sh 'pkill node || true'
-        sh 'nohup node /home/default_admin/deploy/server/server.js &'
-    }
-}
+        stage('Restart Node') {
+            steps {
+                sh 'pkill node || true'
+                sh 'nohup node /home/default_admin/deploy/server/server.js &'
+            }
+        }
 
          stage('Build and Deploy') {
             steps {
