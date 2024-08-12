@@ -36,9 +36,16 @@ pipeline {
         //     }
         // }
 
-        stage('Adjust Permissions') {
+        stage('Check User') {
             steps {
-                sh 'sudo chmod 644 /home/default_admin/deploy/server/server.js'
+                sh 'id'
+            }
+        }
+
+        stage('Adjust Permissions and Verify') {
+            steps {
+                sh 'sudo /bin/chmod 644 /home/default_admin/deploy/server/server.js'
+                sh 'sudo /bin/cat /home/default_admin/deploy/server/server.js'
             }
         }
 
