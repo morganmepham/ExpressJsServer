@@ -56,13 +56,6 @@ pipeline {
             }
         }
 
-        stage('Check File Permissions - server.js') {
-            steps {
-                sh 'ls -l /home/default_admin/deploy/server/server.js'
-                sh 'whoami'
-            }
-        }
-
         stage('Check Node Version') {
             steps {
                 sh 'node --version'
