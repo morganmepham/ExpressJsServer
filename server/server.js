@@ -45,8 +45,12 @@ app.get("/*", (req, res) => {
 
 // HTTPS server options
 const httpsOptions = {
-  key: fs.readFileSync("/home/default_admin/certs/private.key"),
-  cert: fs.readFileSync("/home/default_admin/certs/certificate.crt"),
+  key: fs.readFileSync("/home/default_admin/certs/private.key", (err) => {
+    if (err) console.error("Error reading private key:", err);
+  }),
+  cert: fs.readFileSync("/home/default_admin/certs/certificate.crt", (err) => {
+    if (err) console.error("Error reading certificate:", err);
+  }),
 };
 
 // Create HTTPS server

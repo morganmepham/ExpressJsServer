@@ -11,7 +11,7 @@ pipeline {
                 sh 'rm -rf *'
             }
         }
-        
+
         stage('Checkout') {
             steps {
                 git url: 'git@github.com:morganmepham/ExpressJsServer.git', branch: 'main', credentialsId: '1'
@@ -35,6 +35,32 @@ pipeline {
                 }
             }
         }
+
+        stage('Verify Server.js') {
+    steps {
+        sh 'cat /home/default_admin/deploy/server/server.js'
+    }
+}
+
+stage('Check Node Version') {
+    steps {
+        sh 'node --version'
+    }
+}
+
+stage('Check Permissions') {
+    steps {
+        sh 'ls -l /home/default_admin/certs/private.key'
+        sh 'ls -l /home/default_admin/certs/certificate.crt'
+    }
+}
+
+stage('Restart Node') {
+    steps {
+        sh 'pkill node || true'
+        sh 'nohup node /home/default_admin/deploy/server/server.js &'
+    }
+}
 
          stage('Build and Deploy') {
             steps {
