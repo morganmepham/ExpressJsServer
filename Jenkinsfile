@@ -18,23 +18,23 @@ pipeline {
             }
         }
 
-        // stage('Build Frontend') {
-        //     steps {
-        //         dir('frontend') {
-        //             sh 'npm install'
-        //             sh 'npm run build'
-        //         }
-        //     }
-        // }
+        stage('Build Frontend') {
+            steps {
+                dir('frontend') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
 
-        // stage('Build Backend') {
-        //     steps {
-        //         dir('server') {
-        //             sh 'npm install'
-        //             // Add additional build steps if necessary
-        //         }
-        //     }
-        // }
+        stage('Build Backend') {
+            steps {
+                dir('server') {
+                    sh 'npm install'
+                    // Add additional build steps if necessary
+                }
+            }
+        }
 
         stage('Check Jenkins User') {
             steps {
