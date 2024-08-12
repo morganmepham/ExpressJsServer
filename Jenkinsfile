@@ -6,6 +6,12 @@ pipeline {
     }
 
     stages {
+         stage('Cleanup') {
+            steps {
+                sh 'rm -rf *'
+            }
+        }
+        
         stage('Checkout') {
             steps {
                 git url: 'git@github.com:morganmepham/ExpressJsServer.git', branch: 'main', credentialsId: '1'
