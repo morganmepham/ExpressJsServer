@@ -36,6 +36,13 @@ pipeline {
             }
         }
 
+        stage('Check File Permissions - server.js') {
+    steps {
+        sh 'ls -l /home/default_admin/deploy/server/server.js'
+        sh 'whoami'
+    }
+}
+
         stage('Verify Server.js') {
     steps {
         sh 'cat /home/default_admin/deploy/server/server.js'
@@ -48,7 +55,7 @@ stage('Check Node Version') {
     }
 }
 
-stage('Check Permissions') {
+stage('Check Permissions - cert') {
     steps {
         sh 'ls -l /home/default_admin/certs/private.key'
         sh 'ls -l /home/default_admin/certs/certificate.crt'
