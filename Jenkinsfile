@@ -42,12 +42,12 @@ pipeline {
                 sh 'id'
             }
         }
-
         stage('Check Directory Permissions') {
             steps {
-                sh 'ls -ld /home /home/default_admin /home/default_admin/deploy /home/default_admin/deploy/server'
+                sh 'sudo ls -ld /home /home/default_admin /home/default_admin/deploy /home/default_admin/deploy/server'
             }
         }
+    
 
         stage('Adjust Permissions') {
             steps {
@@ -55,7 +55,7 @@ pipeline {
                 sh 'sudo chown -R jenkins:jenkins /home/default_admin/deploy'
             }
         }
-        
+
         stage('Check File Permissions - server.js') {
             steps {
                 sh 'ls -l /home/default_admin/deploy/server/server.js'
