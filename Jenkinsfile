@@ -64,17 +64,17 @@ pipeline {
 
         stage('Check Permissions - cert') {
             steps {
-                sh 'ls -l /home/default_admin/certs/private.key'
-                sh 'ls -l /home/default_admin/certs/certificate.crt'
+                sh 'sudo ls -ld /home/default_admin/certs/private.key'
+                sh 'sudo ls -ld /home/default_admin/certs/certificate.crt'
             }
         }
 
-        stage('Restart Node') {
-            steps {
-                sh 'pkill node || true'
-                sh 'nohup node /home/default_admin/deploy/server/server.js &'
-            }
-        }
+        // stage('Restart Node') {
+        //     steps {
+        //         sh 'pkill node || true'
+        //         sh 'nohup node /home/default_admin/deploy/server/server.js &'
+        //     }
+        // }
 
          stage('Build and Deploy') {
             steps {
