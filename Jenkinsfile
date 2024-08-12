@@ -36,19 +36,26 @@ pipeline {
         //     }
         // }
 
-        stage('Check User') {
+        stage('Check Jenkins User') {
             steps {
+                sh 'whoami'
                 sh 'id'
             }
         }
 
-        stage('Adjust Permissions and Verify') {
+        stage('Check Directory Permissions') {
             steps {
-                sh 'sudo /bin/chmod 644 /home/default_admin/deploy/server/server.js'
-                sh 'sudo /bin/cat /home/default_admin/deploy/server/server.js'
+                sh 'ls -ld /home /home/default_admin /home/default_admin/deploy /home/default_admin/deploy/server'
             }
         }
 
+        stage('Adjust Permissions') {
+            steps {
+                sh 'sudo chmod -R 755 /home/default_admin/deploy'
+                sh 'sudo chown -R jenkins:jenkins /home/default_admin/deploy'
+            }
+        }
+        
         stage('Check File Permissions - server.js') {
             steps {
                 sh 'ls -l /home/default_admin/deploy/server/server.js'
