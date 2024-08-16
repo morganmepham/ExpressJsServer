@@ -9,7 +9,7 @@ const useAxios = () => {
   const [data, setData] = useState(null);
 
   const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000/api',
+    baseURL: 'https://localhost/api',
     withCredentials: true,
   });
 

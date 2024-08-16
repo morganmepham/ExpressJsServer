@@ -1,26 +1,28 @@
-import React, { useState } from "react";
-import useAxios from "../../../hooks/useAxios";
-import { useNavigate } from "react-router-dom";
-import { Button, TextField, Typography } from "@mui/material";
+import React, { useState } from 'react';
+import useAxios from '../../../hooks/useAxios';
+import { useNavigate } from 'react-router-dom';
+import { Button, TextField, Typography } from '@mui/material';
 
-import { useTheme } from "@emotion/react";
+import { Input } from 'antd';
+
+import { useTheme } from '@emotion/react';
 
 const LoginForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const { post } = useAxios();
   const navigate = useNavigate();
   const theme = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     try {
-      const result = await post("/login", { username, password });
+      const result = await post('/login', { username, password });
       if (result.status === 200) {
-        navigate("/home");
+        navigate('/home');
       }
     } catch (err) {
       console.error(err);
@@ -31,39 +33,48 @@ const LoginForm = () => {
     <form
       onSubmit={handleSubmit}
       style={{
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "center",
-        alignItems: "space-around",
-        height: "50%",
-        position: "relative",
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'space-around',
+        height: '50%',
+        position: 'relative',
         zIndex: 2,
         backgroundColor: theme.palette.background.paper,
-        padding: "2rem",
-        width: "60%",
-        borderRadius: "3%",
+        padding: '2rem',
+        width: '60%',
+        borderRadius: '3%',
       }}
     >
-      <Typography variant="h2" sx={{ fontWeight: 450, color: "#2d703f" }}>
+      <Typography variant="h2" sx={{ fontWeight: 450, color: '#2d703f' }}>
         Gym App
       </Typography>
       <div
         style={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          alignItems: "space-around",
-          width: "100%",
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'space-around',
+          width: '100%',
         }}
       >
-        <TextField
+        <Input
+          placeholder="Basic usage"
+          id="outlined-required"
+          label="Username"
+          fullWidth
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
+          // className="textField"
+        />
+        {/* <TextField
           id="outlined-required"
           label="Username"
           fullWidth
           onChange={(e) => setUsername(e.target.value)}
           value={username}
           className="textField"
-        />
+        /> */}
         <TextField
           id="outlined-required"
           label="Password"
@@ -76,10 +87,10 @@ const LoginForm = () => {
       {error && <p>{error}</p>}
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
         }}
       >
         {/* <SecondaryButton label="Create Account" />

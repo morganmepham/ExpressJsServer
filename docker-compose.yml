@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./server
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://gymapp_user:your_secure_password@db:5432/gymapp_db
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: gymapp_db
+      POSTGRES_USER: gymapp_user
+      POSTGRES_PASSWORD: your_secure_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

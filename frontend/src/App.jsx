@@ -11,6 +11,7 @@ import NotFound from './components/NotFound';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import { ConfigProvider } from 'antd';
 
 function App() {
   const [mode] = useState('dark');
@@ -83,24 +84,48 @@ function App() {
       }),
     [mode]
   );
+
+  const antTheme = useMemo(
+    () => ({
+      algorithm: mode === 'light' ? theme.defaultAlgorithm : theme.darkAlgorithm,
+      token: {
+        colorPrimary: '#2d703f',
+        colorSuccess: '#4CAF50',
+        colorText: mode === 'light' ? '#000000' : '#ffffff',
+        colorTextSecondary: mode === 'light' ? '#000000' : '#ffffff',
+        colorBgContainer: mode === 'light' ? '#f0f2f0' : '#20261f',
+        colorBgElevated: mode === 'light' ? '#bdc2bc' : '#20261f',
+        colorBorder: mode === 'light' ? '#d9d9d9' : '#434343',
+        colorBgBase: mode === 'light' ? '#ffffff' : '#1b1c1b',
+      },
+      components: {
+        Input: {
+          colorTextPlaceholder: mode === 'light' ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.25)',
+        },
+      },
+    }),
+    [mode]
+  );
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route element={<ProtectedRoute />}>
-            <Route element={<Layout />}>
-              <Route path="/home" element={<Home />} />
-              <Route path="templates" element={<Templates />} />
-              <Route path="workouts" element={<Workouts />} />
+    <ConfigProvider theme={antTheme}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Router>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route element={<Layout />}>
+                <Route path="/home" element={<Home />} />
+                <Route path="templates" element={<Templates />} />
+                <Route path="workouts" element={<Workouts />} />
+              </Route>
             </Route>
-          </Route>
-          {/* Catch-all route */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-    </ThemeProvider>
+            {/* Catch-all route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </ThemeProvider>
+    </ConfigProvider>
   );
 }
 
