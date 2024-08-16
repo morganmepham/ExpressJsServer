@@ -1,36 +1,64 @@
 pipeline {
     agent any
-    
+
+    tools {
+        nodejs 'NodeJS-20' // Ensure this matches the NodeJS installation on your Jenkins
+    }
+
     stages {
+        stage('Cleanup') {
+            steps {
+                sh 'rm -rf *'
+            }
+        }
+
         stage('Checkout') {
             steps {
-                git branch: '${env.GIT_BRANCH}', url: 'git@github.com:your-username/your-repo.git'
+                git url: 'git@github.com:morganmepham/ExpressJsServer.git', branch: 'main', credentialsId: '1'
             }
         }
-        
-        stage('Build') {
+
+        stage('Build Frontend') {
             steps {
-                sh 'npm install'
-                sh 'npm run build'
+                dir('frontend') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
             }
         }
-        
-        stage('Test') {
+
+        stage('Build Backend') {
             steps {
-                sh 'npm test'
+                dir('server') {
+                    sh 'npm install'
+                }
             }
         }
-        
-        stage('Docker Build and Deploy') {
-            when {
-                branch 'main'
-            }
+
+        stage('Deploy to Raspberry Pi') {
             steps {
-                sh 'docker build -t your-app-name .'
-                sh 'docker stop your-app-name || true'
-                sh 'docker rm your-app-name || true'
-                sh 'docker run -d --name your-app-name -p 3000:3000 your-app-name'
+                sshagent(credentials: ['pi-ssh-key']) { // Make sure to add your Pi's SSH key to Jenkins credentials
+                    // Deploy Frontend
+                    sh 'ssh -o StrictHostKeyChecking=no pi@raspberrypi.local "mkdir -p /home/pi/deploy/frontend"'
+                    sh 'scp -r frontend/dist/* pi@raspberrypi.local:/home/pi/deploy/frontend/'
+
+                    // Deploy Server
+                    sh 'ssh pi@raspberrypi.local "mkdir -p /home/pi/deploy/server"'
+                    sh 'scp -r server/* pi@raspberrypi.local:/home/pi/deploy/server/'
+
+                    // Install dependencies on Raspberry Pi
+                    sh 'ssh pi@raspberrypi.local "cd /home/pi/deploy/server && npm install"'
+
+                    // Restart Server using PM2
+                    sh 'ssh pi@raspberrypi.local "pm2 restart server || pm2 start /home/pi/deploy/server/server.js --name server"'
+                }
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
         }
     }
 }
